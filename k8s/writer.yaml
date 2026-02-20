@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: writer-deployment
+  namespace: iot-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: writer
+  template:
+    metadata:
+      labels:
+        app: writer
+    spec:
+      containers:
+        - name: writer
+          image: writer:1.0
+          env:
+            - name: DB_HOST
+              value: postgres-service
+            - name: DB_NAME
+              value: iot
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
