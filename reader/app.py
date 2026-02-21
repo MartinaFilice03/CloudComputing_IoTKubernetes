@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 
 DB_HOST = "postgres-service"
-DB_NAME = "postgres"
+DB_NAME = "iot"
 DB_USER = "postgres"
 DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
 

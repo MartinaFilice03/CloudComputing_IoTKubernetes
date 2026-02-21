@@ -16,6 +16,7 @@ spec:
       containers:
         - name: writer
           image: writer:1.0
+          imagePullPolicy: IfNotPresent
           env:
             - name: DB_HOST
               value: postgres-service
@@ -24,4 +25,7 @@ spec:
             - name: DB_USER
               value: postgres
             - name: DB_PASSWORD
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
