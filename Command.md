@@ -64,6 +64,9 @@ kubectl port-forward service/reader-service 5000:5000
 # http://localhost:5000
 # http://localhost:5000/temperatures
 
+# Open browser with other command
+# minikube service reader-service -n iot-project
+
 # -----------------------------------------------------
 # 6. WEB DASHBOARD
 # -----------------------------------------------------
