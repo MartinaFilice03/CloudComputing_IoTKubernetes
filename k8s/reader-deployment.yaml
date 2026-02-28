@@ -37,10 +37,9 @@ kind: Service
 metadata:
   name: reader-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: reader
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 30007

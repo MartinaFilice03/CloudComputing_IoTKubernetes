@@ -1,35 +1,32 @@
-from flask import Flask, jsonify
+from flask import Flask
 import psycopg2
 import os
 
 app = Flask(__name__)
 
-DB_HOST = "postgres-service"
-DB_NAME = "iot"
-DB_USER = "postgres"
-DB_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
-
-def get_connection():
-    return psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD
-    )
-
 @app.route("/")
 def home():
-    return "IoT Reader Running"
+    conn = psycopg2.connect(
+        host="postgres-service",
+        database="iot",
+        user="postgres",
+        password=os.getenv("POSTGRES_PASSWORD")   # ← USA LA SECRET
+    )
 
-@app.route("/temperatures")
-def get_temperatures():
-    conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM temperatures ORDER BY created_at DESC LIMIT 10;")
+    cur.execute("SELECT * FROM temperatures ORDER BY id DESC LIMIT 10;")
     rows = cur.fetchall()
+
+    html = "<h1>IoT Temperature Dashboard</h1><ul>"
+    for row in rows:
+        html += f"<li>ID: {row[0]} | Device: {row[1]} | Temp: {row[2]} | Time: {row[3]}</li>"
+    html += "</ul>"
+
     cur.close()
     conn.close()
-    return jsonify(rows)
+
+    return html
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

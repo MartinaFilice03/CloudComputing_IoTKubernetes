@@ -1,16 +1,35 @@
 async function loadTemps() {
 
+  console.log("CLICK");
+
   const response =
-    await fetch("/temperatures");
+    await fetch("http://localhost:5000/temperatures");
 
   const data = await response.json();
 
+  console.log("DATA:", data);
+
   const list = document.getElementById("temps");
+
+  if (!list) {
+    console.log("ERRORE: elemento temps non trovato");
+    return;
+  }
+
   list.innerHTML = "";
 
-  data.forEach(t => {
+  data.forEach(row => {
+
     const li = document.createElement("li");
-    li.textContent = t.value ?? JSON.stringify(t);
+
+    li.innerText =
+      "ID: " + row[0] +
+      " | Device: " + row[1] +
+      " | Temp: " + row[2] +
+      " | Time: " + row[3];
+
     list.appendChild(li);
   });
+
+  console.log("FINITO");
 }
