@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: reader
-          image: reader:1.0
-          imagePullPolicy: IfNotPresent
+          image: reader:2.0
+          imagePullPolicy: Never
           ports:
             - containerPort: 5000
           env:
