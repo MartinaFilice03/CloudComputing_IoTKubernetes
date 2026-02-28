@@ -36,6 +36,31 @@ Writer --> PostgreSQL --> Reader --> User
 
 For detailed step-by-step instructions, see `Command.md`.
 
+## Web Dashboard
+
+The Reader microservice also provides a simple web interface for visualizing temperature data.
+
+In addition to exposing a REST endpoint, the root endpoint `/` returns an HTML page that displays the latest 10 temperature values stored in PostgreSQL.
+
+To access the dashboard:
+
+1. Run the Reader service port-forward:
+
+   kubectl port-forward service/reader-service 5000:5000 -n iot-project
+
+2. Open a browser and navigate to:
+
+   http://localhost:5000
+
+The page displays:
+
+- Temperature ID
+- Device ID
+- Temperature value
+- Timestamp
+
+The `/temperatures` endpoint remains available as a REST API returning JSON data.
+
 ## Non-Functional Aspects
 
 The project demonstrates the following non-functional properties:
