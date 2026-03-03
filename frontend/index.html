@@ -1,16 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-  <title>IoT Dashboard</title>
+    <meta charset="UTF-8">
+    <title>IoT Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 { color: #333; margin-bottom: 20px; }
+
+        button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button:hover { background-color: #2980b9; }
+
+        #table-container {
+            width: 95%;
+            max-width: 1100px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            /* Forza la tabella a non ridimensionare le colonne in base al testo */
+            table-layout: fixed; 
+        }
+
+        th, td {
+            padding: 15px;
+            /* Allineamento identico per testata e celle */
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        /* Definizione rigorosa delle "corsie" della tabella */
+        .col-id   { width: 80px;  min-width: 80px; }
+        .col-dev  { width: 100px; min-width: 100px; }
+        .col-temp { width: 180px; min-width: 180px; }
+        .col-time { width: auto; } /* Il timestamp prende lo spazio restante */
+
+        tr:nth-child(even) { background-color: #f8f9fa; }
+        tr:hover { background-color: #eef2f7; }
+    </style>
 </head>
-
 <body>
-  <h1>IoT Temperature Dashboard</h1>
 
-  <button onclick="loadTemps()">Load Temperatures</button>
+    <h1>🌡️ IoT Temperature Dashboard</h1>
 
-  <ul id="temps"></ul>
+    <button onclick="loadTemps()">Ricarica Dati</button>
 
-  <script src="script.js"></script>
+    <div id="table-container">
+        <table id="temp-table">
+            <thead>
+                <tr>
+                    <th class="col-id">ID</th>
+                    <th class="col-dev">Device</th>
+                    <th class="col-temp">Temperature (°C)</th>
+                    <th class="col-time">Timestamp</th>
+                </tr>
+            </thead>
+            <tbody id="temps-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
