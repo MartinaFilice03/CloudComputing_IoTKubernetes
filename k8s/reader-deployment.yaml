@@ -36,10 +36,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: reader-service
+  namespace: iot-project
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: reader
   ports:
     - port: 5000
       targetPort: 5000
+      nodePort: 30007
