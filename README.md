@@ -14,7 +14,9 @@ The system is composed of:
 - **Reader**: REST API that retrieves stored temperatures.
 - **Kubernetes Services**: internal communication and load balancing.
 
-Writer --> PostgreSQL --> Reader --> User
+Writer --> PostgreSQL (StatefulSet + PVC)
+        --> Reader (REST API + HTML Dashboard)
+        --> User (Browser)
 
 ## Kubernetes Features Demonstrated
 
@@ -26,6 +28,8 @@ Writer --> PostgreSQL --> Reader --> User
 - Self-healing (automatic pod recreation)
 - Resource monitoring (metrics-server)
 - Persistent storage
+- ConfigMap-based database initialization (init.sql)
+- Secret-based database credentials
 
 ## How to Run
 
@@ -38,28 +42,32 @@ For detailed step-by-step instructions, see `Command.md`.
 
 ## Web Dashboard
 
-The Reader microservice also provides a simple web interface for visualizing temperature data.
+The Reader microservice provides:
 
-In addition to exposing a REST endpoint, the root endpoint `/` returns an HTML page that displays the latest 10 temperature values stored in PostgreSQL.
+- `/` → HTML dashboard (table view)
+- `/api/temperatures` → REST endpoint returning JSON data
 
-To access the dashboard:
+The dashboard displays the latest 20 temperature values stored in PostgreSQL.
 
-1. Run the Reader service port-forward:
+Each row contains:
 
-   kubectl port-forward service/reader-service 5000:5000 -n iot-project
-
-2. Open a browser and navigate to:
-
-   http://localhost:5000
-
-The page displays:
-
-- Temperature ID
+- ID
 - Device ID
 - Temperature value
 - Timestamp
 
-The `/temperatures` endpoint remains available as a REST API returning JSON data.
+To access the system:
+
+1. Start the cluster and deploy all components.
+2. Run:
+
+   kubectl port-forward service/reader-service 5000:5000 -n iot-project
+
+3. Open:
+
+   http://localhost:5000
+
+The table updates dynamically using data retrieved from the `/api/temperatures` endpoint.
 
 ## Non-Functional Aspects
 

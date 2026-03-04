@@ -44,6 +44,8 @@ kubectl apply -f reader-deployment.yaml
 kubectl get pods
 kubectl get svc
 
+# Database is automatically initialized using ConfigMap (init.sql)
+# Credentials are injected via Kubernetes Secret
 
 # -----------------------------------------------------
 # 4. VERIFY SYSTEM IS RUNNING
@@ -58,11 +60,11 @@ kubectl get svc
 # -----------------------------------------------------
 
 # Forward local port to Kubernetes service
-kubectl port-forward service/reader-service 5000:5000
+kubectl port-forward service/reader-service 5000:5000 -n iot-project
 
 # Open browser and show:
-# http://localhost:5000
-# http://localhost:5000/temperatures
+# http://localhost:5000        (HTML dashboard)
+# http://localhost:5000/api/temperatures   (JSON API)
 
 # Open browser with other command
 # minikube service reader-service -n iot-project
@@ -73,7 +75,7 @@ kubectl port-forward service/reader-service 5000:5000
 
 The Reader microservice also provides a simple web interface for visualizing temperature data.
 
-In addition to exposing a REST endpoint, the root endpoint `/` returns an HTML page that displays the latest 10 temperature values stored in PostgreSQL.
+In addition to exposing a REST endpoint, the root endpoint `/` returns an HTML page that displays the latest 20 temperature values stored in PostgreSQL.
 
 To access the dashboard:
 
