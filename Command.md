@@ -76,6 +76,15 @@ kubectl port-forward service/reader-service 5000:5000 -n iot-project
 # Open browser with other command
 # minikube service reader-service -n iot-project
 
+# IMPORTANT NOTE ON INITIALIZATION:
+# Upon the first launch, the system may require up to 1 MINUTE to display data.
+# This delay is expected in distributed systems because:
+# 1. PostgreSQL needs to complete its startup and run the 'init.sql' script.
+# 2. The Writer microservice must wait for the Database to be 'Ready' before connecting.
+# 3. The first temperature samples need a few seconds to be processed and stored.
+# 
+# IF THE TABLE APPEARS EMPTY: Please wait about 60 seconds and REFRESH the page
+
 # -----------------------------------------------------
 # 6. WEB DASHBOARD
 # -----------------------------------------------------
