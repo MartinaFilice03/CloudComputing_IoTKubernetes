@@ -41,9 +41,6 @@ kubectl apply -f postgres.yaml
 kubectl apply -f writer.yaml
 kubectl apply -f reader-deployment.yaml
 
-kubectl get pods
-kubectl get svc
-
 # Database is automatically initialized using ConfigMap (init.sql)
 # Credentials are injected via Kubernetes Secret
 
@@ -64,7 +61,6 @@ kubectl port-forward service/reader-service 5000:5000 -n iot-project
 
 # Open browser and show:
 # http://localhost:5000        (HTML dashboard)
-# http://localhost:5000/api/temperatures   (JSON API)
 
 # Open browser with other command
 # minikube service reader-service -n iot-project
@@ -143,13 +139,14 @@ kubectl get pods -n iot-project
 kubectl exec -it postgres-0 -n iot-project -- psql -U postgres -d iot
 SELECT COUNT(*) FROM temperatures;
 
+# To exit the PostgreSQL interactive terminal (iot=#), press Ctrl + D or type \q and press Enter
+
 # -----------------------------------------------------
 # RESET TO DEFAULT CONFIGURATION
 # -----------------------------------------------------
 
 kubectl scale deployment reader --replicas=1 -n iot-project
 kubectl scale deployment writer-deployment --replicas=1 -n iot-project
-
 
 # -----------------------------------------------------
 # 12. DEBUG COMMANDS
@@ -163,7 +160,6 @@ kubectl logs -f deployment/writer-deployment -n iot-project
 kubectl logs -f deployment/reader -n iot-project
 
 kubectl describe pod <pod-name> -n iot-project
-
 
 # -----------------------------------------------------
 # 13. STOP CLUSTER
