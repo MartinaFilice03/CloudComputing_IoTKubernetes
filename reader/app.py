@@ -4,12 +4,12 @@ import os
 
 app = Flask(__name__)
 
-# Questa rotta serve solo a caricare la pagina iniziale
+#This route is only used to load the home page
 @app.route("/")
 def index():
     return render_template("index.html")
 
-# Questa rotta "API" restituisce solo i dati
+#This "API" route only returns data
 @app.route("/api/temperatures")
 def get_temperatures():
     conn = psycopg2.connect(
@@ -23,7 +23,7 @@ def get_temperatures():
     rows = cur.fetchall()
     conn.close()
 
-    # Trasformiamo i dati in una lista di dizionari (JSON)
+    #Transform the data into a list of dictionaries (JSON)
     data = []
     for r in rows:
         data.append({
