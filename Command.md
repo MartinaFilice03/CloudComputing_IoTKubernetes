@@ -39,6 +39,11 @@ cd ..
 # Run this from the root folder of the project.
 kubectl create configmap postgres-init-script --from-file=db/init.sql -n iot-project
 
+or
+
+cd db 
+kubectl create configmap postgres-init-script --from-file=init.sql -n iot-project
+
 # B. Deploy PostgreSQL (StatefulSet)
 # The StatefulSet is configured to mount the ConfigMap into /docker-entrypoint-initdb.d/
 cd k8s
