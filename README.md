@@ -14,9 +14,14 @@ The system is composed of:
 - **Reader**: REST API that retrieves stored temperatures.
 - **Kubernetes Services**: internal communication and load balancing.
 
-Writer --> PostgreSQL (StatefulSet + PVC)
-        --> Reader (REST API + HTML Dashboard)
-        --> User (Browser)
+## Architecture Diagram
+Writer (Deployment)
+        ↓
+PostgreSQL (StatefulSet + PVC)
+        ↓
+Reader (Deployment + Service)
+        ↓
+Browser (Dashboard)
 
 ## Kubernetes Features Demonstrated
 
@@ -78,6 +83,16 @@ The project demonstrates the following non-functional properties:
 - Self-Healing: Failed pods are automatically recreated.
 - Monitoring: CPU and memory usage can be observed via metrics-server.
 - Data Persistence: PostgreSQL retains data after pod restart.
+
+## Kubernetes Resources Used
+
+- Deployment (Writer, Reader)
+- StatefulSet (PostgreSQL)
+- Service (internal communication)
+- PersistentVolume & PersistentVolumeClaim
+- ConfigMap (database initialization)
+- Secret (database credentials)
+- Namespace (iot-project)
 
 ## Technologies
 
