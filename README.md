@@ -29,6 +29,7 @@ The system is composed of:
 - Persistent storage
 - ConfigMap-based database initialization (init.sql)
 - Secret-based database credentials
+- Automated Database Initialization: Uses a ConfigMap to inject the init.sql script into the PostgreSQL container, ensuring the schema is created automatically on the first startup-
 
 ## How to Run
 

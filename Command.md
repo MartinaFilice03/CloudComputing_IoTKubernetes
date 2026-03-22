@@ -30,19 +30,25 @@ docker build -t writer:1.0 .
 
 cd ..
 
-
 # -----------------------------------------------------
 # 3. DEPLOY THE SYSTEM
 # -----------------------------------------------------
 
-cd k8s
+# A. Create the ConfigMap for Database Initialization
+# This reads the 'init.sql' file from the 'db' folder and makes it available to Kubernetes.
+# Run this from the root folder of the project.
+kubectl create configmap postgres-init-script --from-file=db/init.sql -n iot-project
 
+# B. Deploy PostgreSQL (StatefulSet)
+# The StatefulSet is configured to mount the ConfigMap into /docker-entrypoint-initdb.d/
+cd k8s
 kubectl apply -f postgres.yaml
+
+# C. Deploy IoT Logic (Writer and Reader)
 kubectl apply -f writer.yaml
 kubectl apply -f reader-deployment.yaml
 
-# Database is automatically initialized using ConfigMap (init.sql)
-# Credentials are injected via Kubernetes Secret
+# Note: PostgreSQL will automatically execute 'init.sql' on its first startup.
 
 # -----------------------------------------------------
 # 4. VERIFY SYSTEM IS RUNNING
