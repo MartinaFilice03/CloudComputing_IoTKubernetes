@@ -15,13 +15,7 @@ The system is composed of:
 - **Kubernetes Services**: internal communication and load balancing.
 
 ## Architecture Diagram
-Writer (Deployment)
-        ↓
-PostgreSQL (StatefulSet + PVC)
-        ↓
-Reader (Deployment + Service)
-        ↓
-Browser (Dashboard)
+![Architecture Diagram](Architecture.png)
 
 ## Kubernetes Features Demonstrated
 
