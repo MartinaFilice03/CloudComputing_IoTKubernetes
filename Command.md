@@ -1,10 +1,7 @@
-# =====================================================
-# IOT SYSTEM ON KUBERNETES - DEMO GUIDE
-# =====================================================
+**IOT SYSTEM ON KUBERNETES - DEMO GUIDE**
+-----------------------------------------------------
 
-# -----------------------------------------------------
-# 1. START CLUSTER
-# -----------------------------------------------------
+** 1. START CLUSTER**
 
 minikube start
 kubectl get nodes
@@ -14,9 +11,9 @@ kubectl config set-context --current --namespace=iot-project
 
 kubectl get ns
 
-# -----------------------------------------------------
-# 2. BUILD DOCKER IMAGES (INSIDE MINIKUBE)
-# -----------------------------------------------------
+-----------------------------------------------------
+
+** 2. BUILD DOCKER IMAGES (INSIDE MINIKUBE) **
 
 eval $(minikube docker-env)
 
@@ -30,9 +27,8 @@ docker build -t writer:1.0 .
 
 cd ..
 
-# -----------------------------------------------------
-# 3. DEPLOY THE SYSTEM
-# -----------------------------------------------------
+-----------------------------------------------------
+** 3. DEPLOY THE SYSTEM **
 
 # A. Create the ConfigMap for Database Initialization
 # This reads the 'init.sql' file from the 'db' folder and makes it available to Kubernetes.
@@ -55,17 +51,15 @@ kubectl apply -f reader-deployment.yaml
 
 # Note: PostgreSQL will automatically execute 'init.sql' on its first startup.
 
-# -----------------------------------------------------
-# 4. VERIFY SYSTEM IS RUNNING
-# -----------------------------------------------------
+-----------------------------------------------------
+** 4. VERIFY SYSTEM IS RUNNING **
 
 # Check all components are running
 kubectl get pods
 kubectl get svc
 
-# -----------------------------------------------------
-# 5. ACCESS THE IOT SYSTEM (BROWSER DEMO)
-# -----------------------------------------------------
+-----------------------------------------------------
+** 5. ACCESS THE IOT SYSTEM (BROWSER DEMO)**
 
 # Forward local port to Kubernetes service
 kubectl port-forward service/reader-service 5000:5000 -n iot-project
@@ -85,9 +79,8 @@ kubectl port-forward service/reader-service 5000:5000 -n iot-project
 # 
 # IF THE TABLE APPEARS EMPTY: Please wait about 60 seconds and REFRESH the page
 
-# -----------------------------------------------------
-# 6. WEB DASHBOARD
-# -----------------------------------------------------
+-----------------------------------------------------
+** 6. WEB DASHBOARD **
 
 The Reader microservice also provides a simple web interface for visualizing temperature data.
 
@@ -112,36 +105,26 @@ The page will display:
 
 This allows direct visualization of IoT data without requiring a separate frontend application.
 
-# =====================================================
-# NON-FUNCTIONAL ASPECTS DEMONSTRATION
-# =====================================================
+=====================================================
+** NON-FUNCTIONAL ASPECTS DEMONSTRATION **
 
-
-# -----------------------------------------------------
-# 7. SELF-HEALING
-# -----------------------------------------------------
+** 7. SELF-HEALING **
 
 kubectl get pods -n iot-project
 kubectl delete pod <reader-pod-name> -n iot-project
 kubectl get pods -n iot-project
 
-# -----------------------------------------------------
-# 8. HIGH AVAILABILITY (SCALING READER)
-# -----------------------------------------------------
+** 8. HIGH AVAILABILITY (SCALING READER) **
 
 kubectl scale deployment reader --replicas=3 -n iot-project
 kubectl get pods -n iot-project
 
-# -----------------------------------------------------
-# 9. HORIZONTAL SCALING (IOT LOAD SIMULATION)
-# -----------------------------------------------------
+** 9. HORIZONTAL SCALING (IOT LOAD SIMULATION) **
 
 kubectl scale deployment writer-deployment --replicas=5 -n iot-project
 kubectl get pods -n iot-project
 
-# -----------------------------------------------------
-# 10. MONITORING (RESOURCE USAGE)
-# -----------------------------------------------------
+** 10. MONITORING (RESOURCE USAGE) **
 
 # Shows CPU and memory usage of pods
 kubectl top pods -n iot-project
@@ -149,9 +132,7 @@ kubectl top pods -n iot-project
 # Shows resource usage of cluster node
 kubectl top nodes
 
-# -----------------------------------------------------
-# 11. DATABASE FAULT TOLERANCE
-# -----------------------------------------------------
+** 11. DATABASE FAULT TOLERANCE **
 
 kubectl delete pod postgres-0 -n iot-project
 kubectl get pods -n iot-project
@@ -161,16 +142,14 @@ SELECT COUNT(*) FROM temperatures;
 
 # To exit the PostgreSQL interactive terminal (iot=#), press Ctrl + D or type \q and press Enter
 
-# -----------------------------------------------------
-# RESET TO DEFAULT CONFIGURATION
-# -----------------------------------------------------
+-----------------------------------------------------
+** RESET TO DEFAULT CONFIGURATION **
 
 kubectl scale deployment reader --replicas=1 -n iot-project
 kubectl scale deployment writer-deployment --replicas=1 -n iot-project
 
-# -----------------------------------------------------
-# 12. DEBUG COMMANDS
-# -----------------------------------------------------
+-----------------------------------------------------
+** 12. DEBUG COMMANDS **
 
 kubectl get pods -n iot-project
 kubectl get svc -n iot-project
@@ -181,9 +160,8 @@ kubectl logs -f deployment/reader -n iot-project
 
 kubectl describe pod <pod-name> -n iot-project
 
-# -----------------------------------------------------
-# 13. STOP CLUSTER
-# -----------------------------------------------------
+-----------------------------------------------------
+** 13. STOP CLUSTER **
 
 minikube stop
 
