@@ -27,16 +27,19 @@ The system is composed of:
 - Self-healing (automatic pod recreation)
 - Resource monitoring (metrics-server)
 - Persistent storage
-- ConfigMap-based database initialization (init.sql)
-- Secret-based database credentials
-- Automated Database Initialization: Uses a ConfigMap to inject the init.sql script into the PostgreSQL container, ensuring the schema is created automatically on the first startup-
+- ConfigMap (database initialization via init.sql)
+- Secret (database credentials)
 
 ## How to Run
 
-1. Start Minikube
-2. Build Docker images inside Minikube
-3. Apply Kubernetes manifests
-4. Port-forward the Reader service
+1. Start Minikube:
+   minikube start
+
+2. Apply Kubernetes manifests:
+   kubectl apply -f k8s/
+
+3. Access the application:
+   kubectl port-forward service/reader-service 5000:5000 -n iot-project
 
 For detailed step-by-step instructions, see `Command.md`.
 
@@ -73,11 +76,11 @@ The table updates dynamically using data retrieved from the `/api/temperatures` 
 
 The project demonstrates the following non-functional properties:
 
-- Scalability: Reader and Writer can be scaled horizontally.
-- High Availability: Multiple replicas ensure service continuity.
-- Self-Healing: Failed pods are automatically recreated.
-- Monitoring: CPU and memory usage can be observed via metrics-server.
-- Data Persistence: PostgreSQL retains data after pod restart.
+- **Scalability**: Reader and Writer can be scaled horizontally.
+- **High Availability**: Multiple replicas ensure service continuity.
+- **Self-Healing**: Failed pods are automatically recreated.
+- **Monitoring**: CPU and memory usage can be observed via metrics-server.
+- **Data Persistence**: PostgreSQL retains data after pod restart.
 
 ## Kubernetes Resources Used
 
@@ -91,8 +94,8 @@ The project demonstrates the following non-functional properties:
 
 ## Technologies
 
-- Kubernetes
-- Docker
-- Minikube
-- Python (Flask)
-- PostgreSQL
+- Kubernetes (container orchestration)
+- Docker (containerization)
+- Minikube (local Kubernetes cluster)
+- Python (Flask for REST API and dashboard)
+- PostgreSQL (relational database)
