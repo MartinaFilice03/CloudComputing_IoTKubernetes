@@ -111,19 +111,19 @@ NON-FUNCTIONAL ASPECTS DEMONSTRATION
 
 7. SELF-HEALING 
 
-kubectl get pods -n iot-project
-kubectl delete pod <reader-pod-name> -n iot-project
-kubectl get pods -n iot-project
+- kubectl get pods -n iot-project
+- kubectl delete pod <reader-pod-name> -n iot-project
+- kubectl get pods -n iot-project
 
 8. HIGH AVAILABILITY (SCALING READER)
 
-kubectl scale deployment reader --replicas=3 -n iot-project
-kubectl get pods -n iot-project
+- kubectl scale deployment reader --replicas=3 -n iot-project
+- kubectl get pods -n iot-project
 
 9. HORIZONTAL SCALING (IOT LOAD SIMULATION)
 
-kubectl scale deployment writer-deployment --replicas=5 -n iot-project
-kubectl get pods -n iot-project
+- kubectl scale deployment writer-deployment --replicas=5 -n iot-project
+- kubectl get pods -n iot-project
 
 10. MONITORING (RESOURCE USAGE)
 
@@ -135,11 +135,11 @@ Shows resource usage of cluster node
 
 11. DATABASE FAULT TOLERANCE 
 
-kubectl delete pod postgres-0 -n iot-project
-kubectl get pods -n iot-project
+- kubectl delete pod postgres-0 -n iot-project
+- kubectl get pods -n iot-project
 
-kubectl exec -it postgres-0 -n iot-project -- psql -U postgres -d iot
-SELECT COUNT(*) FROM temperatures;
+- kubectl exec -it postgres-0 -n iot-project -- psql -U postgres -d iot
+- SELECT COUNT(*) FROM temperatures;
 
 To exit the PostgreSQL interactive terminal (iot=#), press Ctrl + D or type \q and press Enter
 
@@ -152,19 +152,19 @@ kubectl scale deployment writer-deployment --replicas=1 -n iot-project
 -----------------------------------------------------
 12. DEBUG COMMANDS
 
-kubectl get pods -n iot-project
-kubectl get svc -n iot-project
-kubectl get endpoints -n iot-project
+- kubectl get pods -n iot-project
+- kubectl get svc -n iot-project
+- kubectl get endpoints -n iot-project
 
-kubectl logs -f deployment/writer-deployment -n iot-project
-kubectl logs -f deployment/reader -n iot-project
+- kubectl logs -f deployment/writer-deployment -n iot-project
+- kubectl logs -f deployment/reader -n iot-project
 
-kubectl describe pod <pod-name> -n iot-project
+- kubectl describe pod <pod-name> -n iot-project
 
 -----------------------------------------------------
 13. STOP CLUSTER 
 
-minikube stop
+- minikube stop
 
 To completely remove cluster:
 - minikube delete
