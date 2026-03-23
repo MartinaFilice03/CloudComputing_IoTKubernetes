@@ -17,13 +17,13 @@ Set default namespace
 
 eval $(minikube docker-env)
 
-#Build Reader
-cd reader
-docker build -t reader:1.0 .
+Build Reader
+- cd reader
+- docker build -t reader:1.0 .
 
-#Build Writer
-cd ../writer
-docker build -t writer:1.0 .
+Build Writer
+- cd ../writer
+- docker build -t writer:1.0 .
 
 cd ..
 
@@ -105,7 +105,8 @@ The page will display:
 
 This allows direct visualization of IoT data without requiring a separate frontend application.
 
-=====================================================
+-----------------------------------------------------
+
 NON-FUNCTIONAL ASPECTS DEMONSTRATION
 
 7. SELF-HEALING 
