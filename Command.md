@@ -111,9 +111,9 @@ NON-FUNCTIONAL ASPECTS DEMONSTRATION
 
 7. SELF-HEALING 
 
-- kubectl get pods -n iot-project
-- kubectl delete pod <reader-pod-name> -n iot-project
-- kubectl get pods -n iot-project
+- `kubectl get pods -n iot-project`
+- `kubectl delete pod <reader-pod-name> -n iot-project`
+- `kubectl get pods -n iot-project`
 
 8. HIGH AVAILABILITY (SCALING READER)
 
@@ -146,8 +146,8 @@ To exit the PostgreSQL interactive terminal (iot=#), press Ctrl + D or type \q a
 -----------------------------------------------------
 RESET TO DEFAULT CONFIGURATION
 
-kubectl scale deployment reader --replicas=1 -n iot-project
-kubectl scale deployment writer-deployment --replicas=1 -n iot-project
+- kubectl scale deployment reader --replicas=1 -n iot-project
+- kubectl scale deployment writer-deployment --replicas=1 -n iot-project
 
 -----------------------------------------------------
 12. DEBUG COMMANDS
