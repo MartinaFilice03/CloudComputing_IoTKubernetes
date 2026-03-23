@@ -1,86 +1,86 @@
 **IOT SYSTEM ON KUBERNETES - DEMO GUIDE**
 -----------------------------------------------------
 
-** 1. START CLUSTER**
+1. START CLUSTER
 
 minikube start
 kubectl get nodes
 
-# Set default namespace
-kubectl config set-context --current --namespace=iot-project
+Set default namespace
+- kubectl config set-context --current --namespace=iot-project
 
-kubectl get ns
+- kubectl get ns
 
 -----------------------------------------------------
 
-** 2. BUILD DOCKER IMAGES (INSIDE MINIKUBE) **
+2. BUILD DOCKER IMAGES (INSIDE MINIKUBE)
 
 eval $(minikube docker-env)
 
-# Build Reader
+#Build Reader
 cd reader
 docker build -t reader:1.0 .
 
-# Build Writer
+#Build Writer
 cd ../writer
 docker build -t writer:1.0 .
 
 cd ..
 
 -----------------------------------------------------
-** 3. DEPLOY THE SYSTEM **
+3. DEPLOY THE SYSTEM 
 
-# A. Create the ConfigMap for Database Initialization
-# This reads the 'init.sql' file from the 'db' folder and makes it available to Kubernetes.
-# Run this from the root folder of the project.
-kubectl create configmap postgres-init-script --from-file=db/init.sql -n iot-project
+A. Create the ConfigMap for Database Initialization. 
+- This reads the 'init.sql' file from the 'db' folder and makes it available to Kubernetes.
+- Run this from the root folder of the project.
+- kubectl create configmap postgres-init-script --from-file=db/init.sql -n iot-project
 
 or
 
-cd db 
-kubectl create configmap postgres-init-script --from-file=init.sql -n iot-project
+- cd db 
+- kubectl create configmap postgres-init-script --from-file=init.sql -n iot-project
 
-# B. Deploy PostgreSQL (StatefulSet)
-# The StatefulSet is configured to mount the ConfigMap into /docker-entrypoint-initdb.d/
-cd k8s
-kubectl apply -f postgres.yaml
+B. Deploy PostgreSQL (StatefulSet)
+The StatefulSet is configured to mount the ConfigMap into /docker-entrypoint-initdb.d/
+- cd k8s
+- kubectl apply -f postgres.yaml
 
-# C. Deploy IoT Logic (Writer and Reader)
-kubectl apply -f writer.yaml
-kubectl apply -f reader-deployment.yaml
+C. Deploy IoT Logic (Writer and Reader)
+- kubectl apply -f writer.yaml
+- kubectl apply -f reader-deployment.yaml
 
-# Note: PostgreSQL will automatically execute 'init.sql' on its first startup.
-
------------------------------------------------------
-** 4. VERIFY SYSTEM IS RUNNING **
-
-# Check all components are running
-kubectl get pods
-kubectl get svc
+Note: PostgreSQL will automatically execute 'init.sql' on its first startup.
 
 -----------------------------------------------------
-** 5. ACCESS THE IOT SYSTEM (BROWSER DEMO)**
+4. VERIFY SYSTEM IS RUNNING 
 
-# Forward local port to Kubernetes service
-kubectl port-forward service/reader-service 5000:5000 -n iot-project
-
-# Open browser and show:
-# http://localhost:5000        (HTML dashboard)
-
-# Open browser with other command
-# minikube service reader-service -n iot-project
-
-# IMPORTANT NOTE ON INITIALIZATION:
-# Upon the first launch, the system may require up to 1 MINUTE to display data.
-# This delay is expected in distributed systems because:
-# 1. PostgreSQL needs to complete its startup and run the 'init.sql' script.
-# 2. The Writer microservice must wait for the Database to be 'Ready' before connecting.
-# 3. The first temperature samples need a few seconds to be processed and stored.
-# 
-# IF THE TABLE APPEARS EMPTY: Please wait about 60 seconds and REFRESH the page
+Check all components are running
+- kubectl get pods
+- kubectl get svc
 
 -----------------------------------------------------
-** 6. WEB DASHBOARD **
+5. ACCESS THE IOT SYSTEM (BROWSER DEMO)
+
+Forward local port to Kubernetes service
+- kubectl port-forward service/reader-service 5000:5000 -n iot-project
+
+Open browser and show:
+- http://localhost:5000        (HTML dashboard)
+
+Open browser with other command
+- minikube service reader-service -n iot-project
+
+IMPORTANT NOTE ON INITIALIZATION:
+- Upon the first launch, the system may require up to 1 MINUTE to display data.
+- This delay is expected in distributed systems because:
+   1. PostgreSQL needs to complete its startup and run the 'init.sql' script.
+   2. The Writer microservice must wait for the Database to be 'Ready' before connecting.
+   3. The first temperature samples need a few seconds to be processed and stored.
+
+IF THE TABLE APPEARS EMPTY: Please wait about 60 seconds and REFRESH the page
+
+-----------------------------------------------------
+6. WEB DASHBOARD
 
 The Reader microservice also provides a simple web interface for visualizing temperature data.
 
@@ -106,33 +106,33 @@ The page will display:
 This allows direct visualization of IoT data without requiring a separate frontend application.
 
 =====================================================
-** NON-FUNCTIONAL ASPECTS DEMONSTRATION **
+NON-FUNCTIONAL ASPECTS DEMONSTRATION
 
-** 7. SELF-HEALING **
+7. SELF-HEALING 
 
 kubectl get pods -n iot-project
 kubectl delete pod <reader-pod-name> -n iot-project
 kubectl get pods -n iot-project
 
-** 8. HIGH AVAILABILITY (SCALING READER) **
+8. HIGH AVAILABILITY (SCALING READER)
 
 kubectl scale deployment reader --replicas=3 -n iot-project
 kubectl get pods -n iot-project
 
-** 9. HORIZONTAL SCALING (IOT LOAD SIMULATION) **
+9. HORIZONTAL SCALING (IOT LOAD SIMULATION)
 
 kubectl scale deployment writer-deployment --replicas=5 -n iot-project
 kubectl get pods -n iot-project
 
-** 10. MONITORING (RESOURCE USAGE) **
+10. MONITORING (RESOURCE USAGE)
 
-# Shows CPU and memory usage of pods
-kubectl top pods -n iot-project
+Shows CPU and memory usage of pods
+- kubectl top pods -n iot-project
 
-# Shows resource usage of cluster node
-kubectl top nodes
+Shows resource usage of cluster node
+- kubectl top nodes
 
-** 11. DATABASE FAULT TOLERANCE **
+11. DATABASE FAULT TOLERANCE 
 
 kubectl delete pod postgres-0 -n iot-project
 kubectl get pods -n iot-project
@@ -140,16 +140,16 @@ kubectl get pods -n iot-project
 kubectl exec -it postgres-0 -n iot-project -- psql -U postgres -d iot
 SELECT COUNT(*) FROM temperatures;
 
-# To exit the PostgreSQL interactive terminal (iot=#), press Ctrl + D or type \q and press Enter
+To exit the PostgreSQL interactive terminal (iot=#), press Ctrl + D or type \q and press Enter
 
 -----------------------------------------------------
-** RESET TO DEFAULT CONFIGURATION **
+RESET TO DEFAULT CONFIGURATION
 
 kubectl scale deployment reader --replicas=1 -n iot-project
 kubectl scale deployment writer-deployment --replicas=1 -n iot-project
 
 -----------------------------------------------------
-** 12. DEBUG COMMANDS **
+12. DEBUG COMMANDS
 
 kubectl get pods -n iot-project
 kubectl get svc -n iot-project
@@ -161,9 +161,9 @@ kubectl logs -f deployment/reader -n iot-project
 kubectl describe pod <pod-name> -n iot-project
 
 -----------------------------------------------------
-** 13. STOP CLUSTER **
+13. STOP CLUSTER 
 
 minikube stop
 
-# To completely remove cluster:
-# minikube delete
+To completely remove cluster:
+- minikube delete
