@@ -4,12 +4,12 @@
 1. START CLUSTER
 
 minikube start
-kubectl get nodes
+- `kubectl get nodes`
 
 Set default namespace
-- kubectl config set-context --current --namespace=iot-project
+- `kubectl config set-context --current --namespace=iot-project`
 
-- kubectl get ns
+- `kubectl get ns`
 
 -----------------------------------------------------
 
@@ -19,11 +19,11 @@ eval $(minikube docker-env)
 
 Build Reader
 - cd reader
-- docker build -t reader:1.0 .
+- `docker build -t reader:1.0 .` 
 
 Build Writer
 - cd ../writer
-- docker build -t writer:1.0 .
+- `docker build -t writer:1.0 .` 
 
 cd ..
 
@@ -33,21 +33,21 @@ cd ..
 A. Create the ConfigMap for Database Initialization. 
 - This reads the 'init.sql' file from the 'db' folder and makes it available to Kubernetes.
 - Run this from the root folder of the project.
-- kubectl create configmap postgres-init-script --from-file=db/init.sql -n iot-project
+- `kubectl create configmap postgres-init-script --from-file=db/init.sql -n iot-project`
 
 or
 
 - cd db 
-- kubectl create configmap postgres-init-script --from-file=init.sql -n iot-project
+- `kubectl create configmap postgres-init-script --from-file=init.sql -n iot-project`
 
 B. Deploy PostgreSQL (StatefulSet)
 The StatefulSet is configured to mount the ConfigMap into /docker-entrypoint-initdb.d/
 - cd k8s
-- kubectl apply -f postgres.yaml
+- `kubectl apply -f postgres.yaml`
 
 C. Deploy IoT Logic (Writer and Reader)
-- kubectl apply -f writer.yaml
-- kubectl apply -f reader-deployment.yaml
+- `kubectl apply -f writer.yaml`
+- `kubectl apply -f reader-deployment.yaml`
 
 Note: PostgreSQL will automatically execute 'init.sql' on its first startup.
 
@@ -55,20 +55,20 @@ Note: PostgreSQL will automatically execute 'init.sql' on its first startup.
 4. VERIFY SYSTEM IS RUNNING 
 
 Check all components are running
-- kubectl get pods
-- kubectl get svc
+- `kubectl get pods -n iot-project`
+- `kubectl get svc`
 
 -----------------------------------------------------
 5. ACCESS THE IOT SYSTEM (BROWSER DEMO)
 
 Forward local port to Kubernetes service
-- kubectl port-forward service/reader-service 5000:5000 -n iot-project
+- `kubectl port-forward service/reader-service 5000:5000 -n iot-project`
 
 Open browser and show:
-- http://localhost:5000        (HTML dashboard)
+- `http://localhost:5000`        (HTML dashboard)
 
 Open browser with other command
-- minikube service reader-service -n iot-project
+- `minikube service reader-service -n iot-project`
 
 IMPORTANT NOTE ON INITIALIZATION:
 - Upon the first launch, the system may require up to 1 MINUTE to display data.
@@ -90,7 +90,7 @@ To access the dashboard:
 
 1. Start the Reader service port-forward:
 
-   kubectl port-forward service/reader-service 5000:5000 -n iot-project
+   `kubectl port-forward service/reader-service 5000:5000 -n iot-project`
 
 2. Open a browser and navigate to:
 
@@ -135,7 +135,7 @@ Shows resource usage of cluster node
 
 11. DATABASE FAULT TOLERANCE 
 
-- `kubectl delete pod postgres-0 -n iot-project
+- `kubectl delete pod postgres-0 -n iot-project`
 - `kubectl get pods -n iot-project`
 
 - `kubectl exec -it postgres-0 -n iot-project -- psql -U postgres -d iot`

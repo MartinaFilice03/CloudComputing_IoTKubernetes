@@ -64,7 +64,7 @@ To access the system:
 1. Start the cluster and deploy all components.
 2. Run:
 
-   kubectl port-forward service/reader-service 5000:5000 -n iot-project
+   `kubectl port-forward service/reader-service 5000:5000 -n iot-project`
 
 3. Open:
 
