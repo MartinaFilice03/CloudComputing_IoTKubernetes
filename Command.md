@@ -43,6 +43,10 @@ or
 To remove an existing ConfigMap if necessary
 - `kubectl delete configmap postgres-init-sql -n iot-project --ignore-not-found`
 
+# Handling the "Missing Annotation" Warning
+When running kubectl apply, it happened once to see:
+- Warning: resource configmaps/postgres-init-sql is missing the kubectl.kubernetes.io/last-applied-configuration annotation...`
+
 B. Deploy PostgreSQL (StatefulSet)
 The StatefulSet is configured to mount the ConfigMap into /docker-entrypoint-initdb.d/
 - cd k8s
