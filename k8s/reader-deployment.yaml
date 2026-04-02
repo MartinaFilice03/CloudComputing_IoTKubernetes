@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: reader
+  namespace: iot-project
 spec:
   replicas: 2
   selector:
@@ -15,7 +16,7 @@ spec:
     spec:
       containers:
         - name: reader
-          image: reader:2.0
+          image: reader:1.0
           imagePullPolicy: Never
           ports:
             - containerPort: 5000

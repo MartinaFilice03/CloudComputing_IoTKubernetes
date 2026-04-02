@@ -25,7 +25,6 @@ metadata:
   name: frontend-service
   namespace: iot-project
 spec:
-  spec:
   type: NodePort
   selector:
     app: frontend
