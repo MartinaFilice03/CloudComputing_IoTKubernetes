@@ -4,8 +4,10 @@ import os
 
 app = Flask(__name__)
 
+# Main route to display the HTML dashboard
 @app.route("/")
 def dashboard():
+    # Establish connection to the PostgreSQL service using environment variables for credentials
     conn = psycopg2.connect(
         host="postgres-service",
         database="iot",
@@ -14,6 +16,7 @@ def dashboard():
     )
 
     cur = conn.cursor()
+    # Fetch the latest 20 temperature readings ordered by timestamp
     cur.execute("""
         SELECT id, device_id, value, created_at
         FROM temperatures
@@ -22,8 +25,9 @@ def dashboard():
     """)
 
     rows = cur.fetchall()
-    conn.close()
+    conn.close() # Always close the connection to free up database resources
 
+    # Start building the HTML response with embedded CSS for styling
     html = """
     <html>
     <head>
@@ -78,6 +82,7 @@ def dashboard():
         </tr>
     """
 
+    # Dynamically generate table rows from database records
     for row in rows:
         html += f"""
         <tr>
@@ -88,6 +93,7 @@ def dashboard():
         </tr>
         """
 
+    # Close the HTML tags
     html += """
     </table>
 
@@ -98,7 +104,7 @@ def dashboard():
     return html
 
 
-# (opzionale ma utile per debug / API)
+# API Endpoint returning raw data in JSON-compatible list format (useful for debugging)
 @app.route("/temperatures")
 def temperatures():
     conn = psycopg2.connect(
@@ -119,8 +125,9 @@ def temperatures():
     rows = cur.fetchall()
     conn.close()
 
+    # Convert database rows (tuples) into lists for JSON serialization
     return [list(row) for row in rows]
 
-
+# Run the Flask application on port 5000, accessible from all network interfaces
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
