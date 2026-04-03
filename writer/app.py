@@ -1,41 +1,43 @@
 import psycopg2
-import os
-import random
 import time
+import random
+import os
 
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_NAME = os.getenv("DB_NAME", "postgres")
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
-
-def get_connection():
-    return psycopg2.connect(
-        host=DB_HOST,
-        database=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD
+def insert_temperature():
+    conn = psycopg2.connect(
+        host="postgres-service",
+        database="iot",
+        user="postgres",
+        password=os.environ.get("POSTGRES_PASSWORD")
     )
+    cur = conn.cursor()
+
+    # CREA TABELLA SE NON ESISTE
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS temperatures (
+            id SERIAL PRIMARY KEY,
+            device_id INT,
+            value FLOAT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
+
+    device_id = random.randint(1, 5)
+    value = round(random.uniform(20, 30), 2)
+
+    cur.execute(
+        "INSERT INTO temperatures (device_id, value) VALUES (%s, %s);",
+        (device_id, value)
+    )
+
+    conn.commit()
+    conn.close()
 
 while True:
     try:
-        conn = get_connection()
-        cur = conn.cursor()
-
-        device_id = random.randint(1, 5)
-        value = round(random.uniform(20.0, 30.0), 2)
-
-        cur.execute(
-            "INSERT INTO temperatures (device_id, value) VALUES (%s, %s)",
-            (device_id, value)
-        )
-
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        print(f"Inserted temperature {value} from device {device_id}")
-
+        insert_temperature()
+        print("Inserted temperature")
+        time.sleep(3)
     except Exception as e:
         print("Error:", e)
-
-    time.sleep(3)
+        time.sleep(5)

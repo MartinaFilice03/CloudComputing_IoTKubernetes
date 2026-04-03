@@ -1,37 +1,35 @@
-metadata:
-  name: postgres
-  namespace: iot-project
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgres-init-sql
+  namespace: iot-project
 data:
   init.sql: |
     CREATE TABLE IF NOT EXISTS temperatures (
       id SERIAL PRIMARY KEY,
       device_id INT,
       value FLOAT,
-      timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: postgres-secret
+  namespace: iot-project
 type: Opaque
 data:
-  POSTGRES_PASSWORD: cG9zdGdyZXM=
+  POSTGRES_PASSWORD: cG9zdGdyZXM= # password: postgres
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
+  namespace: iot-project
 spec:
   ports:
     - port: 5432
-      targetPort: 5432
-  clusterIP: None
+  clusterIP: None # Headless service per StatefulSet
   selector:
     app: postgres
 ---
@@ -39,6 +37,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres
+  namespace: iot-project
 spec:
   serviceName: "postgres-service"
   replicas: 1
@@ -53,8 +52,6 @@ spec:
       containers:
         - name: postgres
           image: postgres:16
-          ports:
-            - containerPort: 5432
           env:
             - name: POSTGRES_DB
               value: iot

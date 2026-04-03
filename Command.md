@@ -27,6 +27,10 @@ Build Writer
 
 cd ..
 
+If you change the Python code, after the build it forces the Pods to update with:
+- `kubectl rollout restart deployment reader` 
+- `kubectl rollout restart deployment writer-deployment -n iot-project` 
+
 -----------------------------------------------------
 3. DEPLOY THE SYSTEM 
 
@@ -68,13 +72,7 @@ Check all components are running
 -----------------------------------------------------
 5. ACCESS THE IOT SYSTEM (BROWSER DEMO)
 
-Forward local port to Kubernetes service
-- `kubectl port-forward service/reader-service 5000:5000 -n iot-project`
-
-Open browser and show:
-- `http://localhost:5000`        (HTML dashboard)
-
-Open browser with other command
+Open browser with this command
 - `minikube service reader-service -n iot-project`
 
 IMPORTANT NOTE ON INITIALIZATION:
@@ -93,15 +91,8 @@ The Reader microservice also provides a simple web interface for visualizing tem
 
 In addition to exposing a REST endpoint, the root endpoint `/` returns an HTML page that displays the latest 20 temperature values stored in PostgreSQL.
 
-To access the dashboard:
-
-1. Start the Reader service port-forward:
-
-   `kubectl port-forward service/reader-service 5000:5000 -n iot-project`
-
-2. Open a browser and navigate to:
-
-   http://localhost:5000
+To access the dashboard use this command:
+- `minikube service reader-service -n iot-project`
 
 The page will display:
 
@@ -134,7 +125,7 @@ NON-FUNCTIONAL ASPECTS DEMONSTRATION
 
 10. MONITORING (RESOURCE USAGE)
 
-Shows CPU and memory usage of pods`
+Shows CPU and memory usage of pods
 - `kubectl top pods -n iot-project`
 
 Shows resource usage of cluster node
@@ -163,10 +154,7 @@ RESET TO DEFAULT CONFIGURATION
 - `kubectl get svc -n iot-project`
 - `kubectl get endpoints -n iot-project`
 
-- `kubectl logs -f deployment/writer-deployment -n iot-project`
-- `kubectl logs -f deployment/reader -n iot-project`
-
-- `kubectl describe pod <pod-name> -n iot-project`
+WARNING: With this last command, may see a warning about v1 Endpoints being deprecated. This is normal in newer Kubernetes versions (v1.33+). The cluster is simply suggesting a move to EndpointSlice, but the command still works perfectly for verification
 
 -----------------------------------------------------
 13. STOP CLUSTER 
