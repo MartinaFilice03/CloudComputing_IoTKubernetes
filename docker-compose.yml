@@ -1,6 +1,5 @@
 services:
-
-  db:
+  postgres-service:
     image: postgres:15
     container_name: postgres
     environment:
@@ -16,26 +15,27 @@ services:
   writer:
     build: ./writer
     container_name: writer
+    restart: always
     environment:
-      DB_HOST: db
+      DB_HOST: postgres-service
       DB_NAME: iot
       DB_USER: postgres
-      DB_PASSWORD: password
+      POSTGRES_PASSWORD: password 
     depends_on:
-      - db
+      - postgres-service
 
   reader:
     build: ./reader
     container_name: reader
     environment:
-      DB_HOST: db
+      DB_HOST: postgres-service
       DB_NAME: iot
       DB_USER: postgres
-      DB_PASSWORD: password
+      POSTGRES_PASSWORD: password 
     ports:
       - "5000:5000"
     depends_on:
-      - db
+      - postgres-service
 
 volumes:
   pgdata:

@@ -128,6 +128,9 @@ NON-FUNCTIONAL ASPECTS DEMONSTRATION
 Shows CPU and memory usage of pods
 - `kubectl top pods -n iot-project`
 
+If metrics is not available use this command:
+- `minikube addons enable metrics-server`
+
 Shows resource usage of cluster node
 - `kubectl top nodes`
 
@@ -163,3 +166,16 @@ WARNING: With this last command, may see a warning about v1 Endpoints being depr
 
 To completely remove cluster:
 - `minikube delete`
+
+If request Docker version use:
+- docker-compose down -v
+- docker-compose up --build
+
+http://localhost:5000
+
+docker-compose restart writer
+
+eventualmente per togliere la porta:
+
+- sudo lsof -i :5432
+- sudo kill -9 <PID_TROVATO>

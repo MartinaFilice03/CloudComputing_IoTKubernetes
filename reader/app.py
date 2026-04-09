@@ -71,7 +71,7 @@ def dashboard():
     </head>
     <body>
 
-    <h1>🌡️ IoT Temperature Dashboard</h1>
+    <h1> IoT Temperature Dashboard</h1>
 
     <table>
         <tr>
